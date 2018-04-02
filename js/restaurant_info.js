@@ -68,7 +68,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     const image = document.getElementById('restaurant-img');
     image.className = 'restaurant-img';
     image.src = DBHelper.imageUrlForRestaurant(restaurant);
-    image.alt = restaurant.name;
+    image.alt = `Image of ${restaurant.name} Restaurant`;
 
     // Responsive images
     const picture = document.getElementById('restaurant-picture');
@@ -169,7 +169,7 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
     li.innerHTML = restaurant.name;
-    li.setAttribute('aria-current', 'page');
+    li.setAttribute('aria-current', 'page'); // todo: setAttribute to <a>, not <li>
     breadcrumb.appendChild(li);
 };
 

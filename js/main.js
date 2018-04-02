@@ -24,7 +24,7 @@ fetchNeighborhoods = () => {
             fillNeighborhoodsHTML();
         }
     });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -39,7 +39,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
         option.setAttribute("aria-label", neighborhood);
         select.append(option);
     });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -53,7 +53,7 @@ fetchCuisines = () => {
             fillCuisinesHTML();
         }
     });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -69,7 +69,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
         option.setAttribute("aria-label", cuisine);
         select.append(option);
     });
-}
+};
 
 /**
  * Initialize Google map, called from HTML.
@@ -85,7 +85,7 @@ window.initMap = () => {
         scrollwheel: false
     });
     updateRestaurants();
-}
+};
 
 /**
  * Update page and map for current restaurants.
@@ -108,7 +108,7 @@ updateRestaurants = () => {
             fillRestaurantsHTML();
         }
     })
-}
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -144,10 +144,10 @@ createRestaurantHTML = (restaurant) => {
     const image = document.createElement('img');
     image.className = 'restaurant-img';
     image.src = DBHelper.imageUrlForRestaurant(restaurant, '/responsive/', '_sm');
-    image.alt = restaurant.name;
+    image.alt = `Image of ${restaurant.name} Restaurant`;
     li.append(image);
 
-    const name = document.createElement('h1');
+    const name = document.createElement('h2');
     name.innerHTML = restaurant.name;
     li.append(name);
 
