@@ -36,13 +36,17 @@ self.addEventListener('activate', (event) => { // update cache, deleting data fr
 
 self.addEventListener('fetch', (event) => { // respond with cache, retrieve from cache, network or database
     event.respondWith(
-        caches.open(staticCacheName).then(cache => {
-            return cache.match(event.request).then(response => {
-                return response || fetch(event.request)
-                        .then(response => {
-                            cache.put(event.request, response.clone())
-                        })
-            })
+        // fetch(event.request)
+        caches.match(event.request).then(function(response) {
+            return response || fetch(event.request);
         })
+        // caches.open(staticCacheName).then(cache => {
+        //     return cache.match(event.request).then(response => {
+        //         return response || fetch(event.request)
+        //                 .then(response => {
+        //                     cache.put(event.request, response.clone())
+        //                 })
+        //     })
+        // })
     )
 });

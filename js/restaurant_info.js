@@ -132,8 +132,8 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
         return;
     }
     const ul = document.getElementById('reviews-list');
-    reviews.forEach(review => {
-        ul.appendChild(createReviewHTML(review));
+    reviews.forEach((review, index) => {
+        ul.appendChild(createReviewHTML(review, reviews.length, index));
     });
     container.appendChild(ul);
 };
@@ -141,8 +141,10 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+createReviewHTML = (review, length, index) => {
     const li = document.createElement('li');
+    li.setAttribute('aria-setsize', length);
+    li.setAttribute('aria-posinset', (Number(index)+1).toString());
     const name = document.createElement('p');
     name.innerHTML = review.name;
     li.appendChild(name);
@@ -169,7 +171,7 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
     li.innerHTML = restaurant.name;
-    li.setAttribute('aria-current', 'page'); // todo: setAttribute to <a>, not <li>
+    li.setAttribute('aria-current', 'page');
     breadcrumb.appendChild(li);
 };
 
