@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "python -m SimpleHTTPServer",
+    "startWin": "python -m http.server",
     "images": "grunt responsive_images",
     "clean": "grunt clean"
   },
