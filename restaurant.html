@@ -4,10 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f3f3"/>
+  <link rel="manifest" href="/manifest.json">
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <link rel="stylesheet" href="css/restaurant_info.css" type="text/css">
   <title>Restaurant Info</title>
 </head>
 
@@ -60,15 +62,9 @@
   </main>
   <!-- End main -->
 
-
-
-  <!-- Beginning scripts -->
-  <script type="text/javascript" src="js/index.js"></script>
-
-  <!-- Database helpers -->
-  <script type="text/javascript" src="js/dbhelper.js"></script>
   <!-- Main javascript file -->
-  <script type="text/javascript" src="js/restaurant_info.js"></script>
+  <script async type="text/javascript" src="js/index.js"></script>
+  <script async type="text/javascript" src="dist/js/restaurant.js"></script>
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDPp0ObRGg4ExEIQGDQihJhOAdPeME3yo&libraries=places&callback=initMap"></script>
   <!-- End scripts -->

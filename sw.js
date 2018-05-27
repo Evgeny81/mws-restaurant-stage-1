@@ -4,11 +4,14 @@ const allUrls = [
     '/',
     '/index.html',
     '/restaurant.html',
-    '/js/dbhelper.js',
-    '/js/main.js',
-    '/css/styles.css',
-    '/data/restaurants.json',
-    '/img'];
+    '/dist/js/main.js',
+    '/dist/js/restaurant.js',
+    '/dist/css/common.css',
+    '/dist/css/main.css',
+    '/dist/css/restaurant_info.css',
+    '/manifest.json',
+    '/dist/img/',
+];
 
 self.addEventListener('install', event => {
     event.waitUntil(caches.open(currentCacheName).then( cache => {
