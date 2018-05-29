@@ -34,8 +34,8 @@ function styles(src) {
 function server() {
     return gulp.src('./')
         .pipe(webserver({
-            livereload: true,
-            directoryListing: true,
+            livereload: false,
+            directoryListing: false,
             open: 'index.html',
             fallback: 'index.html'
         }));

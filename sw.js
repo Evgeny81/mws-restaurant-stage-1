@@ -6,11 +6,11 @@ const allUrls = [
     '/restaurant.html',
     '/dist/js/main.js',
     '/dist/js/restaurant.js',
-    '/dist/css/common.css',
     '/dist/css/main.css',
-    '/dist/css/restaurant_info.css',
+    '/css/restaurant_info.css',
     '/manifest.json',
     '/dist/img/',
+    'sw.js'
 ];
 
 self.addEventListener('install', event => {
@@ -23,11 +23,13 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
     event.waitUntil(caches.keys().then(cacheNames => {
-        cacheNames.filter( cacheName => {
-            return cacheName.startsWith('static-') && cacheName !== currentCacheName;
-        }).map( cacheName => {
-            return caches.delete(cacheName);
-        });
+        return Promise.all(
+            cacheNames.filter( cacheName => {
+                return cacheName.startsWith('static-') && cacheName !== currentCacheName;
+            }).map( cacheName => {
+                return caches.delete(cacheName);
+            })
+        )
     }));
 });
 
