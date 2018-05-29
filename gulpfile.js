@@ -1,14 +1,13 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var concat = require('gulp-concat');
 var imagemin = require('gulp-imagemin');
+var webserver = require('gulp-webserver');
 
 const paths = {
     styles: {
         dest: 'dist/css/',
         mainPage: 'scss/main.scss',
-        restaurant: 'scss/restaurant_info.scss',
-        common: 'scss/common.scss'
+        restaurant: 'scss/restaurant_info.scss'
     },
     images: {
         input: ['img/*/*', 'img/*'],
@@ -32,11 +31,21 @@ function styles(src) {
         }
 }
 
+function server() {
+    return gulp.src('./')
+        .pipe(webserver({
+            livereload: true,
+            directoryListing: true,
+            open: 'index.html',
+            fallback: 'index.html'
+        }));
+}
+gulp.task('webserver', gulp.series(server));
+
 
 gulp.task('styles', gulp.parallel([
     styles(paths.styles.mainPage),
-    styles(paths.styles.restaurant),
-    styles(paths.styles.common)
+    styles(paths.styles.restaurant)
 ]));
 gulp.task('images', gulp.series(images));
-// gulp.task('default', 'styles');
+gulp.task('default', gulp.parallel(['styles', 'images']));

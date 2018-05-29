@@ -26,7 +26,7 @@ self.addEventListener('activate', event => {
         cacheNames.filter( cacheName => {
             return cacheName.startsWith('static-') && cacheName !== currentCacheName;
         }).map( cacheName => {
-            return cache.delete(cacheName);
+            return caches.delete(cacheName);
         });
     }));
 });
