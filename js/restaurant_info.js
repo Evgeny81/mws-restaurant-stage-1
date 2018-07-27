@@ -35,14 +35,14 @@ window.initMap = () => {
 /**
  * Get current restaurant from page URL.
  */
-let fetchRestaurantFromURL = (callback) => {
+const fetchRestaurantFromURL = (callback) => {
     if (self.restaurant) { // restaurant already fetched!
-        callback(null, self.restaurant)
+        callback(null, self.restaurant);
         return;
     }
     const id = getParameterByName('id');
     if (!id) { // no id found in URL
-        error = 'No restaurant id in URL'
+        let error = 'No restaurant id in URL';
         callback(error, null);
     } else {
         DBHelper.fetchRestaurantById(id, (error, restaurant) => {
@@ -60,7 +60,7 @@ let fetchRestaurantFromURL = (callback) => {
 /**
  * Create restaurant HTML and add it to the webpage
  */
-let fillRestaurantHTML = (restaurant = self.restaurant) => {
+const fillRestaurantHTML = (restaurant = self.restaurant) => {
     const name = document.getElementById('restaurant-name');
     name.innerHTML = restaurant.name;
 
@@ -93,13 +93,13 @@ let fillRestaurantHTML = (restaurant = self.restaurant) => {
         fillRestaurantHoursHTML();
     }
     // fill reviews
-    fillReviewsHTML();
+    DBHelper.fetchReviews(restaurant.id).then(reviews => {fillReviewsHTML(reviews)});
 };
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
-let fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
+const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
     const hours = document.getElementById('restaurant-hours');
     for (let key in operatingHours) {
         const row = document.createElement('tr');
@@ -121,7 +121,7 @@ let fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours)
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h3');
     title.innerHTML = 'Reviews';
@@ -134,8 +134,8 @@ let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
         return;
     }
     const ul = document.getElementById('reviews-list');
-    reviews.forEach((review, index) => {
-        ul.appendChild(createReviewHTML(review, reviews.length, index));
+    reviews.forEach((review) => {
+        ul.appendChild(createReviewHTML(review));
     });
     container.appendChild(ul);
 };
@@ -143,16 +143,23 @@ let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-let createReviewHTML = (review, length, index) => {
+const createReviewHTML = (review) => {
     const li = document.createElement('li');
-    li.setAttribute('aria-setsize', length);
-    li.setAttribute('aria-posinset', (Number(index)+1).toString());
+
+    if (!navigator.onLine) {
+        const connection_status = document.createElement('p');
+        connection_status.classList.add('offline_label');
+        connection_status.innerHTML = 'Offline';
+        li.classList.add('reviews_offline');
+        li.appendChild(connection_status);
+    }
+
     const name = document.createElement('p');
     name.innerHTML = review.name;
     li.appendChild(name);
 
     const date = document.createElement('p');
-    date.innerHTML = review.date;
+    date.innerHTML = new Date(review.createdAt).toLocaleDateString();
     li.appendChild(date);
 
     const rating = document.createElement('p');
@@ -169,7 +176,7 @@ let createReviewHTML = (review, length, index) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-let fillBreadcrumb = (restaurant = self.restaurant) => {
+const fillBreadcrumb = (restaurant = self.restaurant) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
     li.innerHTML = restaurant.name;
@@ -180,7 +187,7 @@ let fillBreadcrumb = (restaurant = self.restaurant) => {
 /**
  * Get a parameter by name from page URL.
  */
-let getParameterByName = (name, url) => {
+const getParameterByName = (name, url) => {
     if (!url)
         url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -192,3 +199,40 @@ let getParameterByName = (name, url) => {
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+const validateField = (value, fieldName) => {
+    if (!value.length) {
+        document.getElementById(fieldName).classList.add('error');
+        return false;
+    }
+    document.getElementById(fieldName).classList.remove('error');
+    return true;
+};
+
+const addReview =  () => {
+    event.preventDefault();
+    const restaurantId = getParameterByName('id');
+    const name = document.getElementById('name').value;
+    const rating = document.querySelector('#rating_select option:checked').value;
+    const comments = document.getElementById('comments').value;
+
+    if (!validateField(name, 'name') || !validateField(comments, 'comments')) {
+        return;
+    }
+
+    const review = [name, rating, comments, restaurantId];
+    const userInput = {
+        restaurant_id: parseInt(review[3]),
+        rating: parseInt(review[1]),
+        name: review[0],
+        comments: review[2],
+        createdAt: Date.parse(new Date())
+    };
+    DBHelper.addReview(userInput);
+    const ul = document.getElementById('reviews-list');
+    ul.appendChild(createReviewHTML(userInput));
+    document.getElementById('form').reset();
+};
+
+document.getElementById('form_submit').addEventListener('click', addReview);
+

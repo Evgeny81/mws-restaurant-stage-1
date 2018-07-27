@@ -5,14 +5,19 @@ let restaurants,
     cuisines;
 let map;
 let markers = [];
+const triggeredSelects = ['neighborhoods-select', 'cuisines-select'];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
-document.addEventListener('DOMContentLoaded', () => {
-    fetchNeighborhoods();
-    fetchCuisines();
-});
+
+document.onreadystatechange = function () {
+    if (document.readyState !== "loading") {
+        fetchNeighborhoods();
+        fetchCuisines();
+    }
+};
+
 /**
  * Update restaurants on change
  */
@@ -23,8 +28,9 @@ function update(id) {
     });
 }
 
-update('neighborhoods-select');
-update('cuisines-select');
+triggeredSelects.forEach(select => {
+    update(select);
+});
 
 /**
  * Fetch all neighborhoods and set their HTML.
@@ -135,14 +141,14 @@ let resetRestaurants = (restaurants) => {
 
     // Remove all map markers
     markers.forEach(m => m.setMap(null));
-    self.markers = [];
+    markers = [];
     self.restaurants = restaurants;
 };
 
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
-let fillRestaurantsHTML = (restaurants = self.restaurants) => {
+const fillRestaurantsHTML = (restaurants = self.restaurants) => {
     const ul = document.getElementById('restaurants-list');
     restaurants.forEach((restaurant, index) => {
         ul.append(createRestaurantHTML(restaurant, restaurants.length, index));
@@ -153,7 +159,7 @@ let fillRestaurantsHTML = (restaurants = self.restaurants) => {
 /**
  * Create restaurant HTML.
  */
-let createRestaurantHTML = (restaurant, length, index) => {
+const createRestaurantHTML = (restaurant, length, index) => {
     const li = document.createElement('li');
     li.setAttribute('aria-setsize', length);
     li.setAttribute('aria-posinset', (Number(index)+1).toString());
@@ -165,7 +171,16 @@ let createRestaurantHTML = (restaurant, length, index) => {
     li.append(image);
 
     const name = document.createElement('h2');
+    const favoriteRestaurantMark = document.createElement('button');
+    favoriteRestaurantMark.className = restaurant.is_favorite ? 'favorite-button' : 'favorite-button common';
+    favoriteRestaurantMark.onclick = () => {
+        DBHelper.handleFavoriteRestaurant(restaurant.id, restaurant.is_favorite);
+        restaurant.is_favorite = !restaurant.is_favorite;
+        favoriteRestaurantMark.className = restaurant.is_favorite ? 'favorite-button' : 'favorite-button common';
+    };
+    favoriteRestaurantMark.innerHTML = ('&#9733;');
     name.innerHTML = restaurant.name;
+    name.appendChild(favoriteRestaurantMark);
     li.append(name);
 
     const neighborhood = document.createElement('p');
@@ -195,6 +210,6 @@ let addMarkersToMap = (restaurants = self.restaurants) => {
         google.maps.event.addListener(marker, 'click', () => {
             window.location.href = marker.url
         });
-        self.markers.push(marker);
+        markers.push(marker);
     });
 };

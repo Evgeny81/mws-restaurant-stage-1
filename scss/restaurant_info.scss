@@ -1,4 +1,12 @@
 @import "common";
+
+@mixin header {
+    color: #b56000;
+    font-size: 24pt;
+    font-weight: 300;
+    letter-spacing: -1px;
+    padding-bottom: 1pt;
+}
 /* ====================== Restaurant Details ====================== */
 .inside header {
     position: fixed;
@@ -49,7 +57,7 @@
 
 #restaurant-address {
     font-size: 12pt;
-    margin: 10px 0px;
+    margin: 10px 0;
 }
 
 #restaurant-cuisine {
@@ -82,16 +90,22 @@
 }
 
 #reviews-container h3 {
-    color: #b56000;
-    font-size: 24pt;
-    font-weight: 300;
-    letter-spacing: -1px;
-    padding-bottom: 1pt;
+    @include header;
 }
 
 #reviews-list {
     margin: 0;
     padding: 0;
+
+    .reviews_offline {
+      box-shadow: 2px 2px 2px 0 red;
+    }
+
+    .offline_label {
+      text-align: center;
+      font-size: 20px;
+      color: red;
+    }
 }
 
 #reviews-list li {
@@ -114,12 +128,48 @@
     color: #666;
 }
 
+#reviews-form {
+    padding-bottom: 70px;
+    padding-top: 30px;
+    width: 50%;
+    h3 {
+        @include header;
+    }
+    form {
+        text-align: center;
+        .row {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        label {
+            display: inline-block;
+            width: 18%;
+        }
+        input, select, textarea {
+            box-sizing: border-box;
+            display: inline-block;
+            height: 30px;
+            width: 80%;
+        }
+
+        textarea {
+            height: 200px;
+            resize: none;
+        }
+
+        .error {
+            border: 1px solid red;
+        }
+    }
+}
+
 @media screen and (max-width: 1100px) {
     .inside #map-container {
         width: 100%;
     }
     #restaurant-container,
-    #reviews-container {
+    #reviews-container,
+    #reviews-form {
         width: 100%;
     }
 

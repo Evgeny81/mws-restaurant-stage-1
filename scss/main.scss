@@ -72,6 +72,19 @@
     text-transform: uppercase;
 }
 
+#restaurants-list li .favorite-button {
+    background: none;
+    border: 0;
+    color: #ff0000;
+    display: block;
+    font-size: unset;
+    padding: 0;
+}
+
+#restaurants-list li .favorite-button.common {
+    color: #000;
+}
+
 #restaurants-list p {
     margin: 0;
     font-size: 11pt;

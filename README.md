@@ -4,7 +4,7 @@
 # Run project
 ## Start server
 
-Follow the instructions [mws-restaurant-stage-2](https://github.com/udacity/mws-restaurant-stage-2)/
+Follow the instructions [mws-restaurant-stage-3](https://github.com/udacity/mws-restaurant-stage-3).
 
 ## Start application
 
